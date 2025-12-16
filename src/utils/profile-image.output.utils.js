@@ -6,7 +6,6 @@ const {
   genBase,
   genFrame,
   genTextAndAvatar,
-  genAvatarFrame,
   genBorder,
   genBadges,
   genBotVerifBadge,
@@ -15,28 +14,26 @@ const {
 } = require('../utils/profile-image.utils');
 
 GlobalFonts.registerFromPath(
-  `${path.join(__dirname, '..', '..', 'public', 'fonts')}/HelveticaBold.ttf`,
-  `Helvetica Bold`
+  `${path.join(__dirname, '..', '..', 'public', 'fonts')}/Minecraft.ttf`,
+  `Minecraft`
 );
 GlobalFonts.registerFromPath(
-  `${path.join(__dirname, '..', '..', 'public', 'fonts')}/Helvetica.ttf`,
-  `Helvetica`
+  `${path.join(__dirname, '..', '..', 'public', 'fonts')}/Minecraft.ttf`,
+  `Minecraft`
 );
 
 async function genPng(data, options) {
-  const { basicInfo, assets } = data;
   const canvas = createCanvas(885, 303);
   const ctx = canvas.getContext('2d');
 
-  const userAvatar = (assets.avatarURL ?? assets.defaultAvatarURL) + '?size=512';
-  const userBanner = assets.bannerURL ? assets.bannerURL + '?size=512' : null;
+  const userAvatar = (data.avatarURL ?? data.defaultAvatarURL) + '?size=512';
   const badges = await getBadges(data, options);
 
   if (options?.removeBorder) ctx.roundRect(9, 9, 867, 285, [26]);
   else ctx.roundRect(0, 0, 885, 303, [34]);
   ctx.clip();
 
-  const cardBase = await genBase(options, userAvatar, userBanner);
+  const cardBase = await genBase(options, userAvatar, data.bannerURL);
   ctx.drawImage(cardBase, 0, 0);
 
   const cardFrame = await genFrame(badges, options);
@@ -48,17 +45,6 @@ async function genPng(data, options) {
   ctx.drawImage(cardTextAndAvatar, 0, 0);
 
   if (
-    !options?.disableProfileTheme &&
-    data?.decoration?.profileColors &&
-    typeof options?.borderColor === 'undefined'
-  ) {
-    options.borderColor = data?.decoration?.profileColors;
-    if (!options?.borderAllign) {
-      options.borderAllign = 'vertical';
-    }
-  }
-
-  if (
     (typeof options?.borderColor === 'string' && options.borderColor) ||
     (Array.isArray(options?.borderColor) && options.borderColor.length > 0)
   ) {
@@ -66,7 +52,7 @@ async function genPng(data, options) {
     ctx.drawImage(border, 0, 0);
   }
 
-  if (basicInfo?.bot) {
+  if (data.bot) {
     const botVerifBadge = await genBotVerifBadge(data);
     const shadowVerifBadge = addShadow(botVerifBadge);
     ctx.drawImage(shadowVerifBadge, 0, 0);
@@ -83,15 +69,6 @@ async function genPng(data, options) {
   if (options?.rankData) {
     const xpBar = genXpBar(options);
     ctx.drawImage(xpBar, 0, 0);
-  }
-
-  if (
-    !options?.removeAvatarFrame &&
-    data?.decoration?.avatarFrame &&
-    !options?.squareAvatar
-  ) {
-    const avatarFrame = await genAvatarFrame(data, options);
-    ctx.drawImage(avatarFrame, 0, 0);
   }
 
   return canvas.toBuffer('image/png');

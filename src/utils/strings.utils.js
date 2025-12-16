@@ -1,5 +1,11 @@
+function capitalizeUsername(username) {
+  return username.slice(0, 1).toUpperCase() + username.slice(1);
+}
+
 function parseUsername(username, ctx, font, size, maxLength) {
-  username = username && username.replace(/\s/g, '') ? username : '?????'
+  username = capitalizeUsername(
+    username.replace(/\s/g, '') ? username : '?????'
+  );
   let usernameChars = username.split('');
   let editableUsername = '';
   let finalUsername = '';
@@ -84,26 +90,23 @@ function abbreviateNumber(number) {
   return `${getFirstDigitsAsDecimal(numString)}${selectedAbbr}`;
 }
 
-const getDateOrString = (dateInput, createdTimestamp, localDateType = 'en') => {
+const getDateOrString = (dateInput, createdTimestamp) => {
   const dateOptions = {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
   };
-  
-  const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/;
-
   if (typeof dateInput === 'string') {
-    if (iso8601Regex.test(dateInput)) {
-      const dateInstance = new Date(dateInput);
-      return dateInstance.toLocaleDateString(localDateType, dateOptions);
+    const dateInstance = new Date(dateInput);
+    if (!isNaN(dateInstance.getTime())) {
+      return dateInstance.toLocaleDateString('en', dateOptions);
     } else {
       return dateInput;
     }
   } else if (dateInput instanceof Date) {
-    return dateInput.toLocaleDateString(localDateType, dateOptions);
-  } else if (dateInput === undefined || dateInput === null) {
-    return new Date(+createdTimestamp).toLocaleDateString(localDateType, dateOptions);
+    return dateInput.toLocaleDateString('en', dateOptions);
+  } else {
+    return new Date(+createdTimestamp).toLocaleDateString('en', dateOptions);
   }
 };
 

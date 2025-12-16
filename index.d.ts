@@ -22,8 +22,6 @@ interface profileOptions {
     tagColor?: string;
     borderColor?: string | string[];
     borderAllign?: borderAllign;
-    disableProfileTheme?: boolean;
-    disableBackgroundBlur?: boolean;
     badgesFrame?: boolean;
     removeBadges?: boolean;
     removeBorder?: boolean;
@@ -32,8 +30,6 @@ interface profileOptions {
     moreBackgroundBlur?: boolean;
     backgroundBrightness?: number
     customDate?: Date | string;
-    localDateType?: string;
-    removeAvatarFrame?: boolean;
     rankData?: rankOptions;
 }
 

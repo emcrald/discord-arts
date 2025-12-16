@@ -1,6 +1,6 @@
 
 <div align='center'>
-  <img src='https://i.imgur.com/VBVAWrM.png' alt='Discord-Arts Banner' />
+  <img src='https://i.imgur.com/o3jM8MJ.png' alt='Discord-Arts Banner' />
   <p align='center'>
   <a href='https://www.npmjs.com/package/discord-arts'>
     <img src='https://img.shields.io/npm/v/discord-arts?label=version&style=for-the-badge' alt='version' />
@@ -28,33 +28,16 @@ npm i discord-arts@latest
 + 🎨 Simple and beautiful design
 + 🎖️ Easy to use
 + 💎 Beginner friendly
-+ ❌ Discord.js not required
-
-# 📌 NEW!!
-
-+ 🖼️ Avatar decorations/frames!!
-+ 🎴 Automatic profile theme colors!!
-+ 🔮 Booster badges are back!!
-+ 🛡️ Automod and LegacyUsername badges!!
 
 # 🖼️ Cards
 
 ## 🪄 profileImage(userId, imgOptions?)
-> ![Default](https://i.imgur.com/TWf8v1G.png)
-> 
-> *Card of a USER / BOT, with its badges and more custom options.*
-> 
-> #### Returns: **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<**[Buffer](https://nodejs.org/api/buffer.html)**>**
-> 
-> <blockquote>
-<details>
-<summary><strong>imgOptions</strong> (Click to show)</summary>
+
+*Generates the card of a user/bot, with its badges.*
 
 ```js
 profileImage(userId, {
-  customUsername?: string, // Customise the username
   customTag?: string, // Text below the user
-  customSubtitle?: string, // Text below the custom tag
   customBadges?: string[], // Your own png badges (path and URL) (46x46)
   customBackground?: string, // Change the background to any image (path and URL) (885x303)
   overwriteBadges?: boolean, // Merge your badges with the discord defaults
@@ -65,10 +48,8 @@ profileImage(userId, {
   tagColor?: string, // Tag HEX color
   borderColor?: string | string[], // Border HEX color, can be gradient if 2 colors are used
   borderAllign?: string, // Gradient alignment if 2 colors are used
-  disableProfileTheme?: boolean, // Disable the discord profile theme colors
   presenceStatus?: string, // User status to be displayed below the avatar
   squareAvatar?: boolean, // Change avatar shape to a square
-  removeAvatarFrame?: boolean, // Remove the discord avatar frame/decoration (if any)
   rankData?: {
     currentXp: number, // Current user XP
     requiredXp: number, // XP required to level up
@@ -85,15 +66,14 @@ profileImage(userId, {
   moreBackgroundBlur?: boolean, // Triples blur of background image
   backgroundBrightness?: number, // Set brightness of background from 1-100%
   customDate?: Date || string, // Custom date or text to use instead of when user joined Discord
-
-  localDateType?: string, // Local format for the date, e.g. 'en' | 'es' etc.
 })
 ```
-</details>
 
-<details>
-  <summary><strong>Code examples</strong> (Click to show)</summary>
-<h4>📃 Discord.js v14</h4>
+#### Returns: **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<**[Buffer](https://nodejs.org/api/buffer.html)**>**
+
+***
+
+### 📃 Discord.js v14 Example
 
 ```javascript
 const { AttachmentBuilder } = require('discord.js');
@@ -108,65 +88,74 @@ const buffer = await profileImage(user.id, {
   ...imgOptions
 });
 
-interaction.followUp({ files: [buffer] });
+const attachment = new AttachmentBuilder(buffer, { name: 'profile.png' });
+interaction.followUp({ files: [attachment] });
 ```
-</details>
 
-<details>
-  <summary><strong>Result images</strong> (Click to show)</summary>
+***
+
+### 🖼️Example Results 
+
+## Default Card
+
+> ![Default](https://i.imgur.com/IlTioY4.png)
+>> ```javascript
+>> profileImage('UserID')
+>> ```
+
+***
 
 ## Rank Card
 
-> ![Default](https://i.imgur.com/Rd6ScN1.png)
-> ```javascript
-> profileImage('UserID', {
->   customBadges: [  './skull.png', './rocket.png', './crown.png'  ],
->   presenceStatus: 'phone',
->   badgesFrame: true,
->   customDate: 'AWESOME!',
->   moreBackgroundBlur: true,
->   backgroundBrightness: 100,
->   rankData: {
->     currentXp: 2100,
->     requiredXp: 3000,
->     rank: 1,
->     level: 20,
->     barColor: '#fcdce1',
->     levelColor: '#ada8c6',
->     autoColorRank: true
->   }
-> });
-> ```
+> ![Default](https://i.imgur.com/30qVLRx.png)
+>> ```javascript
+>> profileImage('UserID', {
+>>   customBadges: [  './skull.png', './letter.png', './rocket.png', './crown.png', './hearth.png'  ],
+>>   borderColor: '#087996',
+>>   presenceStatus: 'phone',
+>>   badgesFrame: true,
+>>   customDate: 'AWESOME!',
+>>   moreBackgroundBlur: true,
+>>   backgroundBrightness: 100,
+>>   rankData: {
+>>     currentXp: 2100,
+>>     requiredXp: 3000,
+>>     rank: 1,
+>>     level: 20,
+>>     barColor: '0b7b95',
+>>     levelColor: '00d7ff',
+>>     autoColorRank: true
+>>   }
+>> });
+>> ```
 
 ***
 
 ## Custom User Card
 
-> ![Default](https://i.imgur.com/8wB4v2L.png)
-> ```javascript
-> profileImage('UserID', {
->   borderColor: ['#0000ff', '#00fe5a'],
->   presenceStatus: 'idle',
->   removeAvatarFrame: false
-> });
-> ```
+> ![Default](https://i.imgur.com/xnRXSaS.png)
+>> ```javascript
+>> profileImage('UserID', {
+>>   borderColor: ['#0000ff', '#00fe5a'],
+>>   presenceStatus: 'idle',
+>>   squareAvatar: true
+>>   badgesFrame: true,
+>> });
+>> ```
 
 ***
 
 ## Custom Bot Card
 
-> ![Default](https://i.imgur.com/ldKbKvv.png)
-> ```javascript
-> profileImage('UserID', {
->   customBackground: 'https://i.imgur.com/LWcWzlc.png',
->   borderColor: '#ec8686',
->   presenceStatus: 'online',
->   badgesFrame: true
-> });
-> ```
-</details>
-</blockquote>
-
+> ![Default](https://i.imgur.com/crv9akL.png)
+>> ```javascript
+>> profileImage('UserID', {
+>>   customBackground: 'https://i.imgur.com/LWcWzlc.png',
+>>   borderColor: '#ec8686',
+>>   presenceStatus: 'online',
+>>   badgesFrame: true
+>> });
+>> ```
 
 ***
 
@@ -177,5 +166,5 @@ interaction.followUp({ files: [buffer] });
 
 > # ⭐ Support
 >
-> ### [> Discord Server <](https://discord.gg/csedxqGQKP)
+> ### Send me a msg on discord! [iAsure#0001](https://discord.com/users/339919990947971105)
 
